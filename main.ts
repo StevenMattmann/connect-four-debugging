@@ -3,18 +3,26 @@ import { Board, Player } from "./board.ts";
 const board = new Board();
 let player = Player.PlayerX;
 
-board.output();
-
 while (true) {
-  const input = prompt(`Player ${player}:`) || "";
+  console.clear();
+  console.log(board.print());
+  const input = prompt(`Player ${player} (0-6):`);
+
+  if (input === null) continue;
+
   const col = Number.parseInt(input);
+  if (Number.isNaN(col)) continue;
+
   const row = board.makeMove(player, col);
-  board.output();
-  console.log();
+  if (row === -1) continue;
+
   const winner = board.winner(player, row, col);
-  if (winner != Player.Nobody) {
-    console.log(`Player ${player}: A winner is you!`);
+  if (winner !== Player.Nobody) {
+    console.clear();
+    console.log(board.print());
+    console.log(`Player ${winner} wins!`);
     break;
   }
-  player = player == Player.PlayerX ? Player.PlayerO : Player.PlayerX;
+
+  player = player === Player.PlayerX ? Player.PlayerO : Player.PlayerX;
 }
